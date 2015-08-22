@@ -1,0 +1,82 @@
+#include<avr/io.h>
+#include<util/delay.h>
+#define s3	(PINA&(1<<6))
+#define s4      (PINA&(1<<7))
+#define s1      (PINA&(1<<0))
+
+void main()
+
+{
+ DDRD|=(1<<4)|(1<<5)|(1<<6)|(1<<7);
+ DDRB|=(1<<0)|(1<<1);
+
+ DDRA&=~(1<<6);
+ PORTA|=(1<<6);
+ DDRA&=~(1<<7);
+ PORTA|=(1<<7);
+ DDRA&=~(1<<0);
+ PORTA|=(1<<0);
+PORTB|=(1<<1)|(1<<0);
+ while(1)
+{
+if(s3&&s4)
+ {
+
+PORTD|=(1<<5);
+ PORTD&=~(1<<4);
+ PORTD|=(1<<7);
+ PORTD&=~(1<<6); //forward
+
+}
+
+else if(!s3&&s4)
+{ 
+ PORTD|=(1<<7);
+ PORTD&=~(1<<6);
+ PORTD&=~(1<<4);
+ PORTD&=~(1<<5); //right
+}
+
+else if(s3&&!s4)
+{
+   PORTD|=(1<<5);
+ PORTD&=~(1<<4);
+ PORTD&=~(1<<6);
+ PORTD&=~(1<<7); //left
+ }
+
+
+  
+ if((!s1))
+{
+
+ PORTD&=~(1<<7);
+ PORTD&=~(1<<6);
+ PORTD&=~(1<<4);
+ PORTD&=~(1<<5); //stop
+
+
+do
+{ 
+ PORTB|=(1<<1);
+ PORTB&=~(1<<0);
+ }while(!s1);
+//_delay_ms(7000);
+
+ PORTB&=~(1<<1);
+ PORTB&=~(1<<0);
+}
+
+else
+{ 
+ PORTD&=~(1<<7);
+ PORTD&=~(1<<6);
+ PORTD&=~(1<<4);
+ PORTD&=~(1<<5); //stop
+}
+ 
+
+
+
+}
+}
